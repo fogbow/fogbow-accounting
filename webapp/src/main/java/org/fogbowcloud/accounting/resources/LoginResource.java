@@ -60,19 +60,14 @@ public class LoginResource {
     	
     	HttpSession session = request.getSession(true);
     	
+    	String managerUrl = properties.getProperty(FogbowConstants.FOGBOW_MANAGER_URL_PROP);
+    	Response response = checkAuthToken(authToken, managerUrl);
+    	if (response.getStatus() != Status.OK.getStatusCode()) {
+    		return Response.status(Status.UNAUTHORIZED).build();
+    	}
     	session.setAttribute(AUTH_TOKEN_ATTRIBUTE, authToken);
     	
-    	String managerUrl = properties.getProperty(FogbowConstants.FOGBOW_MANAGER_URL_PROP);
-    	
-    	Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(managerUrl + FogbowConstants.REQUEST_TERM);
-		String responseContent = target.request()
-				.header(FogbowConstants.CONTENT_TYPE_HEADER_ATTR, FogbowConstants.CONTENT_TYPE_TEXT_OCCI)
-				.header(FogbowConstants.AUTH_TOKEN_HEADER_ATTR, authToken)
-				.accept(MediaType.TEXT_PLAIN)
-				.get(String.class);
-    	
-    	return Response.status(Status.OK).entity(responseContent).build();
+    	return Response.status(Status.OK).build();
     }
     
     @GET
@@ -94,7 +89,16 @@ public class LoginResource {
     	
     	String managerUrl = properties.getProperty(FogbowConstants.FOGBOW_MANAGER_URL_PROP);
     	
-    	Client client = ClientBuilder.newClient();
+    	Response response = checkAuthToken(sessionAuthToken, managerUrl);
+    	if (response.getStatus() != Status.OK.getStatusCode()) {
+    		return Response.status(Status.UNAUTHORIZED).build();
+    	}
+    	
+    	return Response.status(Status.OK).build();
+    }
+
+	protected Response checkAuthToken(Object sessionAuthToken, String managerUrl) {
+		Client client = ClientBuilder.newClient();
     	WebTarget target = client.target(managerUrl + FogbowConstants.REQUEST_TERM);
     	Invocation get = target.request()
     			.header(FogbowConstants.CONTENT_TYPE_HEADER_ATTR, FogbowConstants.CONTENT_TYPE_TEXT_OCCI)
@@ -102,10 +106,6 @@ public class LoginResource {
     			.accept(MediaType.TEXT_PLAIN)
     			.buildGet();
     	Response response = get.invoke();
-    	if (response.getStatus() != Status.OK.getStatusCode()) {
-    		return Response.status(Status.UNAUTHORIZED).build();
-    	}
-    	
-    	return Response.status(Status.OK).build();
-    }
+		return response;
+	}
 }
