@@ -1,0 +1,37 @@
+<div class="row">
+	<div class="col-md-12">
+		<!-- Nav tabs -->
+		<ul class="mytabs nav nav-tabs" role="tablist">
+			<li role="presentation" class="active"><a href="#billingtab" aria-controls="billingtab" role="tab" data-toggle="tab">Billing info</a></li>
+		    <li role="presentation"><a href="#noftab" aria-controls="noftab" role="tab" data-toggle="tab">NOF info</a></li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="billingtab">
+				<h2>Usage info</h2>
+				<table class="table table-condensed table-striped">
+		    		<thead>
+		    			<tr>
+		    				<th>Federation user</th>
+		    				<th>Requesting member</th>
+		    				<th>Providing member</th>
+		    				<th>Value</th>
+		    			</tr>
+		    		</thead>
+		    		<tbody>
+		    			<tr ng-repeat="use in usage">
+		    				<td><a href="#/usage/{{use.federation_user}}">{{use.federation_user}}</a></td>
+		    				<td><a href="#/usage/{{use.requesting_member}}">{{use.requesting_member}}</a></td>
+		    				<td><a href="#/usage/{{use.providing_member}}">{{use.providing_member}}</a></td>
+		    				<td>{{use.value}}</td>
+		    			</tr>
+		    		</tbody>
+		    	</table>
+			</div>
+		    <div role="tabpanel" class="tab-pane" id="noftab">
+		    	<h3>NOF INFO</h3>
+		    </div>
+		</div>
+	</div>
+</div>

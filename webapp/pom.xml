@@ -163,16 +163,6 @@
            <artifactId>slf4j-simple</artifactId>
            <version>1.5.6</version>
 		</dependency>
-		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>itextpdf</artifactId>
-			<version>5.5.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.itextpdf.tool</groupId>
-			<artifactId>xmlworker</artifactId>
-			<version>5.5.2</version>
-		</dependency>
 	</dependencies>
 
 	<repositories>

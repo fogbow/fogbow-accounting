@@ -1,0 +1,30 @@
+[
+	{
+		"id": 1, 
+		"federation_user": "marcosancj@lsd.ufcg.edu.br", 
+		"requesting_member": "servers.lsd.ufcg.edu.br", 
+		"providing_member": "manager.i3m.upv.es", 
+		"value": 10
+	},
+	{
+		"id": 2, 
+		"federation_user": "marcosancj@lsd.ufcg.edu.br", 
+		"requesting_member": "servers.lsd.ufcg.edu.br", 
+		"providing_member": "servers.lsd.ufcg.edu.br", 
+		"value": 6
+	},
+	{
+		"id": 3,
+		"federation_user": "marcosancj@lsd.ufcg.edu.br", 
+		"requesting_member": "manager.i3m.upv.es", 
+		"providing_member": "servers.lsd.ufcg.edu.br", 
+		"value": 2
+	},
+	{
+		"id": 4, 
+		"federation_user": "marcosancj@lsd.ufcg.edu.br", 
+		"requesting_member": "servers.lsd.ufcg.edu.br", 
+		"providing_member": "desktops.ufcg.edu.br", 
+		"value": 5
+	}
+]

@@ -1,0 +1,22 @@
+server {
+	root /path/to/fogbow-accounting/frontend/app;
+	index index.html index.htm;
+
+	# Make site accessible from http://example.com/
+	server_name example.com;
+
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to index.html
+		try_files $uri $uri/ /index.html;
+		# Uncomment to enable naxsi on this location
+		# include /etc/nginx/naxsi.rules
+	}
+
+	location ^/api/ {
+		proxy_pass http://localhost:8080/;
+	}
+
+}
+
+

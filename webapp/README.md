@@ -1,1 +1,1 @@
-# fogbow-accounting
+# fogbow-accounting webapp
