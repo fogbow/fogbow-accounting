@@ -1,0 +1,11 @@
+#! /bin/bash
+DIRNAME=`dirname $0`
+LOG4J=log4j2.xml
+cd $DIRNAME/..
+if [[ -f $LOG4J ]]; then
+    CONF_LOG=-Dlog4j.configurationFile=$LOG4J
+else
+    CONF_LOG=
+fi
+CONF_JUL=-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
+java $CONF_JUL $CONF_LOG -cp target/accounting-0.0.1-SNAPSHOT-jar-with-dependencies.jar:target/lib/* org.fogbowcloud.accounting.Main > /dev/null &
