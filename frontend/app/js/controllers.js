@@ -2,8 +2,8 @@
 
 var fogbowAccountingControllers = angular.module('fogbowAccountingControllers', []);
 
-fogbowAccountingControllers.controller('HomeCtrl', ['$scope', 'Usage', 
-	function($scope, Usage) {
+fogbowAccountingControllers.controller('HomeCtrl', ['$scope', 'Usage', 'Nof', 
+	function($scope, Usage, Nof) {
 		$scope.initTabs = function() {
 			$(".mytabs a").click(function(e){
 				e.preventDefault();
@@ -12,6 +12,7 @@ fogbowAccountingControllers.controller('HomeCtrl', ['$scope', 'Usage',
 		};
 		$scope.initTabs();
 		$scope.usage = Usage.query();
+		$scope.members = Nof.query();
 	}]);
 
 fogbowAccountingControllers.controller('LoginCtrl', ['$scope', '$location', '$http', 'toastr',
@@ -33,4 +34,10 @@ fogbowAccountingControllers.controller('LoginCtrl', ['$scope', '$location', '$ht
 				});
 			}
 		};
+	}]);
+
+fogbowAccountingControllers.controller('UsageByUserCtrl', ['$scope', '$routeParams', 'UsageByUser', 
+	function($scope, $routeParams, UsageByUser) {
+		$scope.userId = $routeParams.userId;
+		$scope.usage = UsageByUser.query({userId: $routeParams.userId});
 	}]);

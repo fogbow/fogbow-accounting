@@ -1,0 +1,20 @@
+<div class="row">
+	<div class="col-md-12">
+		<p><a href="#/home">Home</a> &gt; <strong>Usage of user {{userId}}</strong></p>
+		<table class="table table-condensed table-striped">
+    		<thead>
+    			<tr>
+    				<th>Consumed from</th>
+    				<th>Total</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    			<tr ng-repeat="use in usage">
+    				<td>{{use.providing_member}}</td>
+    				<td>{{use.value}}</td>
+    			</tr>
+    		</tbody>
+    	</table>
+		</div>
+	</div>
+</div>

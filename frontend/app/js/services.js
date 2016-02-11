@@ -10,3 +10,13 @@ fogbowAccountingServices.factory('Usage', ['$resource',
 			query: {method:'GET', params:{'memberId': ''}, isArray: true}
 		});
 	}]);
+
+fogbowAccountingServices.factory('UsageByUser', ['$resource', 
+	function($resource) {
+		return $resource('/api/usage/user/:userId');
+	}]);
+
+fogbowAccountingServices.factory('Nof', ['$resource', 
+	function($resource) {
+		return $resource('/api/usage/members');
+	}]);
