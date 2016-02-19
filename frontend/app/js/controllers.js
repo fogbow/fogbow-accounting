@@ -41,3 +41,9 @@ fogbowAccountingControllers.controller('UsageByUserCtrl', ['$scope', '$routePara
 		$scope.userId = $routeParams.userId;
 		$scope.usage = UsageByUser.query({userId: $routeParams.userId});
 	}]);
+
+fogbowAccountingControllers.controller('MemberUsagePerUserCtrl', ['$scope', '$routeParams', 'Nof', 
+	function($scope, $routeParams, Nof) {
+		$scope.memberId = $routeParams.memberId;
+		$scope.memberUsers = Nof.query({'memberId': $routeParams.memberId});
+	}]);

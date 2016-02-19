@@ -18,5 +18,5 @@ fogbowAccountingServices.factory('UsageByUser', ['$resource',
 
 fogbowAccountingServices.factory('Nof', ['$resource', 
 	function($resource) {
-		return $resource('/api/usage/members');
+		return $resource('/api/usage/members/:memberId', {'memberId': ''});
 	}]);

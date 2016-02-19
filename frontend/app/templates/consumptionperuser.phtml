@@ -1,0 +1,19 @@
+<div class="row">
+	<div class="col-md-12">
+		<h2>Consumption per user from {{memberId}}</h2>
+		<table class="table table-condensed table-striped">
+    		<thead>
+    			<tr>
+    				<th>Federation user</th>
+    				<th>Consumed</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    			<tr ng-repeat="use in memberUsers">
+    				<td>{{use.user}}</td>
+    				<td>{{use.usage}}</td>
+    			</tr>
+    		</tbody>
+    	</table>
+	</div>
+</div>

@@ -14,16 +14,12 @@
 		    		<thead>
 		    			<tr>
 		    				<th>Federation user</th>
-		    				<th>Requesting</th>
-		    				<th>Providing</th>
 		    				<th>Consumed</th>
 		    			</tr>
 		    		</thead>
 		    		<tbody>
 		    			<tr ng-repeat="use in usage">
 		    				<td><a href="#/usage/user/{{use.federation_user}}">{{use.user}}</a></td>
-		    				<td>{{use.requestingMember}}</td>
-		    				<td>{{use.providingMember}}</td>
 		    				<td>{{use.usage}}</td>
 		    			</tr>
 		    		</tbody>
@@ -42,7 +38,7 @@
 		    		</thead>
 		    		<tbody>
 		    			<tr ng-repeat="member in members">
-		    				<td>{{member.memberId}}</td>
+		    				<td><a href="#/usage/member/{{member.memberId}}">{{member.memberId}}</a></td>
 		    				<td>{{member.donated}}</td>
 		    				<td>{{member.consumed}}</td>
 		    				<td>{{member.debit}}</td>

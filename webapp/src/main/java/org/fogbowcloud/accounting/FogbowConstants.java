@@ -10,6 +10,7 @@ public class FogbowConstants {
 	public static final String AUTH_TOKEN_HEADER_ATTR = "X-Auth-Token";
 	
 	public static final String FOGBOW_MANAGER_URL_PROP = "fogbow.manager.url";
+	public static final String FOGBOW_MANAGER_ID_PROP = "fogbow.manager.id";
 	
 	public static final String SESSION_AUTH_TOKEN_ATTRIBUTE = "authToken";
 }

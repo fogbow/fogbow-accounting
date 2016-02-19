@@ -22,6 +22,9 @@ fogbowAccountingApp.config(['$routeProvider',
 			}).when('/usage/user/:userId', {
 				templateUrl: 'templates/user.phtml',
 				controller: 'UsageByUserCtrl'
+			}).when('/usage/member/:memberId', {
+				templateUrl: 'templates/consumptionperuser.phtml',
+				controller: 'MemberUsagePerUserCtrl'
 			}).otherwise({
 				redirectTo: '/home'
 			});

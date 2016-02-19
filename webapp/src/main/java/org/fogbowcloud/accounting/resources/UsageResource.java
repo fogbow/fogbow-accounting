@@ -19,7 +19,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fogbowcloud.accounting.Authentication;
+import org.fogbowcloud.accounting.FogbowConstants;
 import org.fogbowcloud.accounting.db.AccountingDataStore;
 import org.fogbowcloud.accounting.model.AccountingInfo;
 import org.json.JSONArray;
@@ -27,6 +30,7 @@ import org.json.JSONObject;
 
 @Path("usage")
 public class UsageResource {
+	private static final Logger LOGGER = LogManager.getLogger(UsageResource.class);
 
 	@Inject
 	private AccountingDataStore dataStore;
@@ -44,7 +48,11 @@ public class UsageResource {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		JSONArray usage = new JSONArray();
-		List<AccountingInfo> accountingInfo = dataStore.getMemberAccountingInfoPerUser("servers.lsd.ufcg.edu.br");
+		String memberId = properties.getProperty(FogbowConstants.FOGBOW_MANAGER_ID_PROP);
+		if (memberId == null) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
+		List<AccountingInfo> accountingInfo = dataStore.getMemberConsumptionInfoPerUser(memberId);
 		for (AccountingInfo info : accountingInfo) {
 			usage.put(info.toJSON());
 		}
@@ -111,5 +119,21 @@ public class UsageResource {
 		}
 		
 		return Response.status(Status.OK).entity(membersUsage.toString()).build();
+	}
+	
+	@GET
+	@Path("/members/{memberId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getMemberConsumptionPerUser(@PathParam("memberId") String memberId) {
+		if (!Authentication.checkAuthToken(request, properties)) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		JSONArray usage = new JSONArray();
+		List<AccountingInfo> accountingInfo = dataStore.getMemberConsumptionInfoPerUser(memberId);
+		LOGGER.debug("Accounting info for member " + memberId + ", resulted in list of " + accountingInfo.size());
+		for (AccountingInfo info : accountingInfo) {
+			usage.put(info.toJSON());
+		}
+		return Response.status(Status.OK).entity(usage).build();
 	}
 }

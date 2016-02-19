@@ -245,9 +245,9 @@ public class AccountingDataStore {
 	
 	private static final String SELECT_ALL_USAGE_BY_MEMBER = "SELECT " + USER_COL + ", " + REQUESTING_MEMBER_COL 
 			+ ", " + PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME 
-			+ " WHERE " + REQUESTING_MEMBER_COL + " = ? OR " + PROVIDING_MEMBER_COL + " = ? GROUP BY " + USER_COL;
+			+ " WHERE " + REQUESTING_MEMBER_COL + " = ? GROUP BY " + USER_COL;
 	
-	public List<AccountingInfo> getMemberAccountingInfoPerUser(String memberId) {
+	public List<AccountingInfo> getMemberConsumptionInfoPerUser(String memberId) {
 		LOGGER.debug("Getting AccounintgInfo by member: " + memberId + ", grouped by user");
 		PreparedStatement statement = null;
 		Connection conn = null;
@@ -255,7 +255,6 @@ public class AccountingDataStore {
 			conn = getConnection();
 			statement = conn.prepareStatement(SELECT_ALL_USAGE_BY_MEMBER);
 			statement.setString(1, memberId);
-			statement.setString(2, memberId);
 
 			statement.execute();
 			return createAccounting(statement.getResultSet());
