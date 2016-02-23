@@ -1,0 +1,12 @@
+[
+	{"user":"marcosancj@lsd.ufcg.edu.br", "requesting_member": "servers.lsd.ufcg.edu.br", "providing_member": "desktops.lsd.ufcg.edu.br", "usage": "10"},
+	{"user":"marcosancj@lsd.ufcg.edu.br", "requesting_member": "servers.lsd.ufcg.edu.br", "providing_member": "manager.i3m.upv.es", "usage": "20"},
+	{"user":"marcosancj@lsd.ufcg.edu.br", "requesting_member": "servers.lsd.ufcg.edu.br", "providing_member": "fogbow01.cmcc.it", "usage": "30"},
+	{"user":"giovanni@lsd.ufcg.edu.br", "requesting_member": "servers.lsd.ufcg.edu.br", "providing_member": "desktops.lsd.ufcg.edu.br", "usage": "10"},
+	{"user":"gustavo@lsd.ufcg.edu.br", "requesting_member": "servers.lsd.ufcg.edu.br", "providing_member": "desktops.lsd.ufcg.edu.br", "usage": "10"},
+	{"user":"chicog@lsd.ufcg.edu.br", "requesting_member": "servers.lsd.ufcg.edu.br", "providing_member": "desktops.lsd.ufcg.edu.br", "usage": "10"},
+	{"user":"eduardolfalcao@lsd.ufcg.edu.br", "requesting_member": "manager.i3m.upv.es", "providing_member": "servers.lsd.ufcg.edu.br", "usage": "30"},
+	{"user":"eduardolfalcao@lsd.ufcg.edu.br", "requesting_member": "fogbow01.cmcc.it", "providing_member": "servers.lsd.ufcg.edu.br", "usage": "10"},
+	{"user":"eduardolfalcao@lsd.ufcg.edu.br", "requesting_member": "fogbow-manager.bsc.es", "providing_member": "servers.lsd.ufcg.edu.br", "usage": "10"},
+	{"user":"eduardolfalcao@lsd.ufcg.edu.br", "requesting_member": "fogbow-manager.compute.rnp.br", "providing_member": "servers.lsd.ufcg.edu.br", "usage": "10"}
+]

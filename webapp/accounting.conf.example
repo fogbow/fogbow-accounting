@@ -1,5 +1,4 @@
 base.port=8080
 fogbow.manager.url=http://150.165.15.81:8182
 fogbow.manager.id=servers.lsd.ufcg.edu.br
-fake.accounting.file=fake.accounting.json
-accounting_datastore_url=jdbc:sqlite:fogbowAccountingDB.sqlite
+accounting.datastore.url=jdbc:sqlite:fogbowAccountingDB.sqlite

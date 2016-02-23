@@ -13,7 +13,7 @@ fogbowAccountingServices.factory('Usage', ['$resource',
 
 fogbowAccountingServices.factory('UsageByUser', ['$resource', 
 	function($resource) {
-		return $resource('/api/usage/user/:userId');
+		return $resource('/api/usage/member/:memberId/user/:userId');
 	}]);
 
 fogbowAccountingServices.factory('Nof', ['$resource', 

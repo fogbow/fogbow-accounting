@@ -39,7 +39,7 @@ fogbowAccountingControllers.controller('LoginCtrl', ['$scope', '$location', '$ht
 fogbowAccountingControllers.controller('UsageByUserCtrl', ['$scope', '$routeParams', 'UsageByUser', 
 	function($scope, $routeParams, UsageByUser) {
 		$scope.userId = $routeParams.userId;
-		$scope.usage = UsageByUser.query({userId: $routeParams.userId});
+		$scope.usage = UsageByUser.query({userId: $routeParams.userId, memberId: $routeParams.memberId});
 	}]);
 
 fogbowAccountingControllers.controller('MemberUsagePerUserCtrl', ['$scope', '$routeParams', 'Nof', 

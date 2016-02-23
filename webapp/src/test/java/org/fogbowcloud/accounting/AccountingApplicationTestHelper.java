@@ -12,20 +12,19 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
-public class AccountingApplication extends ResourceConfig {
-	
+public class AccountingApplicationTestHelper extends ResourceConfig {
 	private AccountingDataStore dataStore;
 
-	public AccountingApplication() throws Exception {
-		Properties props = Main.loadProperties();
+	public AccountingApplicationTestHelper() throws Exception {
+		Properties props = ServerTestHelper.loadProperties();
 		init(props);
 	}
 
-	protected AccountingApplication(Properties props) throws Exception {
+	protected AccountingApplicationTestHelper(Properties props) throws Exception {
 		init(props);
 	}
 	
-	private AccountingApplication init(final Properties properties) throws SQLException {
+	private AccountingApplicationTestHelper init(final Properties properties) throws SQLException {
 		this.dataStore = new AccountingDataStore(properties);
 		packages(AccountingApplication.class.getPackage().toString());
 		register(new AbstractBinder() {
@@ -43,5 +42,4 @@ public class AccountingApplication extends ResourceConfig {
 		register(MultiPartFeature.class);
 		return this;
 	}
-	
 }

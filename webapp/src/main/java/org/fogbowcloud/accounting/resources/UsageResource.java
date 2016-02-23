@@ -1,6 +1,5 @@
 package org.fogbowcloud.accounting.resources;
 
-import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.fogbowcloud.accounting.Authentication;
@@ -61,18 +59,22 @@ public class UsageResource {
 	}
 	
 	@GET
-	@Path("/user/{userId}")
+	@Path("/member/{memberId}/user/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUsageByUser(@PathParam("userId") String userId) {
+	public Response getUsageByUser(@PathParam("memberId") String memberId, 
+			@PathParam("userId") String userId) {
 		if (!Authentication.checkAuthToken(request, properties)) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
 		try {
-			String fakeAccountingFilename = "fake.accounting.local." + userId.toLowerCase() + ".json";
-			String fakeAccountingJsonStr = IOUtils.toString(new FileInputStream(fakeAccountingFilename));
+			List<AccountingInfo> userConsumption = dataStore.getUserConsumptionPerMemberByMemberId(userId, memberId);
+			JSONArray usage = new JSONArray();
+			for (AccountingInfo accountingInfo : userConsumption) {
+				usage.put(accountingInfo.toJSON());
+			}
 			return Response.status(Status.OK)
-					.entity(fakeAccountingJsonStr).build();
+					.entity(usage).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

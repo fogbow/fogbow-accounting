@@ -1,0 +1,6 @@
+[
+	{"user": "marcosancj@lsd.ufcg.edu.br", "memberId": "servers.lsd.ufcg.edu.br", "expectedUsage": "60", "expectedEntries": "3"},
+	{"user": "giovanni@lsd.ufcg.edu.br", "memberId": "servers.lsd.ufcg.edu.br", "expectedUsage": "10", "expectedEntries": "1"},
+	{"user": "chicog@lsd.ufcg.edu.br", "memberId": "servers.lsd.ufcg.edu.br", "expectedUsage": "10", "expectedEntries": "1"},
+	{"user": "eduardolfalcao@lsd.ufcg.edu.br", "memberId": "servers.lsd.ufcg.edu.br", "expectedUsage": "0", "expectedEntries": "0"}
+]

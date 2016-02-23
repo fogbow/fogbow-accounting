@@ -19,12 +19,12 @@ fogbowAccountingApp.config(['$routeProvider',
 			}).when('/login', {
 				templateUrl: 'templates/login.phtml',
 				controller: 'LoginCtrl'
-			}).when('/usage/user/:userId', {
-				templateUrl: 'templates/user.phtml',
-				controller: 'UsageByUserCtrl'
 			}).when('/usage/member/:memberId', {
 				templateUrl: 'templates/consumptionperuser.phtml',
 				controller: 'MemberUsagePerUserCtrl'
+			}).when('/usage/member/:memberId/user/:userId', {
+				templateUrl: 'templates/user.phtml',
+				controller: 'UsageByUserCtrl'
 			}).otherwise({
 				redirectTo: '/home'
 			});
@@ -60,4 +60,5 @@ fogbowAccountingApp.config(['$routeProvider',
 				toastr.error('Problem while disconnecting. Try again.');
 			});
 		}
+		$rootScope._localMember = "servers.lsd.ufcg.edu.br";
 	});

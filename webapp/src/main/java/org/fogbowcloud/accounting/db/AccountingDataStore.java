@@ -7,10 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +16,7 @@ import org.fogbowcloud.accounting.model.AccountingInfo;
 
 public class AccountingDataStore {
 
-	public static final String ACCOUNTING_DATASTORE_URL = "accounting_datastore_url";
+	public static final String ACCOUNTING_DATASTORE_URL = "accounting.datastore.url";
 	public static final String ACCOUNTING_DATASTORE_URL_DEFAULT = "jdbc:sqlite:/tmp/usage";
 	public static final String ACCOUNTING_DATASTORE_SQLITE_DRIVER = "org.sqlite.JDBC";
 	
@@ -66,8 +64,8 @@ public class AccountingDataStore {
 	private static final String INSERT_MEMBER_USAGE_SQL = "INSERT INTO " + USAGE_TABLE_NAME
 			+ " VALUES(?, ?, ?, ?)";
 	
-	public boolean insertUsageExample() {
-		LOGGER.debug("Inserting example values");
+	public boolean insertData(List<AccountingInfo> sampleDataSet) {
+		LOGGER.debug("Inserting sample data");
 		PreparedStatement insertMemberStatement = null;
 		Connection connection = null;
 		try {
@@ -75,35 +73,12 @@ public class AccountingDataStore {
 			connection.setAutoCommit(false);
 			insertMemberStatement = connection.prepareStatement(INSERT_MEMBER_USAGE_SQL);
 			
-			List<String> users = new LinkedList<String>();
-			users.add("marcosancj@lsd.ufcg.edu.br");
-			users.add("giovanni@lsd.ufcg.edu.br");
-			users.add("eduardolfalcao@lsd.ufcg.edu.br");
-			users.add("chicog@lsd.ufcg.edu.br");
-			users.add("esdras@lsd.ufcg.edu.br");
-			users.add("igorvcs@lsd.ufcg.edu.br");
-			List<String> members = new LinkedList<String>();
-			members.add("servers.lsd.ufcg.edu.br");
-			members.add("desktops.lsd.ufcg.edu.br");
-			members.add("fogbow01.cmcc.it");
-			members.add("fogbow-manager.bsc.es");
-			members.add("manager.i3m.upv.es");
-			members.add("fogbow-manager.lncc.br");
-			members.add("fogbow-manager.compute.rnp.br");
-			
-			for (String user : users) {
-				for (String requesting : members) {
-					for (String providing : members) {
-						if (requesting.equals(providing) && !requesting.equals("servers.lsd.ufcg.edu.br")) {
-							continue;
-						}
-						insertMemberStatement.setString(1, user);
-						insertMemberStatement.setString(2, requesting);
-						insertMemberStatement.setString(3, providing);
-						insertMemberStatement.setDouble(4, new Random().nextDouble() * new Random().nextInt(100));
-						insertMemberStatement.addBatch();
-					}
-				}
+			for (AccountingInfo accountingInfo : sampleDataSet) {
+				insertMemberStatement.setString(1, accountingInfo.getUser());
+				insertMemberStatement.setString(2, accountingInfo.getRequestingMember());
+				insertMemberStatement.setString(3, accountingInfo.getProvidingMember());
+				insertMemberStatement.setDouble(4, accountingInfo.getUsage());
+				insertMemberStatement.addBatch();
 			}
 			
 			if (hasBatchExecutionError(insertMemberStatement.executeBatch())) {
@@ -299,6 +274,30 @@ public class AccountingDataStore {
 		}
 	}
 	
+	private static final String SELECT_USER_CONSUMPTION_PER_MEMBER = "SELECT " + USER_COL + ", " + REQUESTING_MEMBER_COL + ", " 
+			+ PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME + " WHERE " + USER_COL + " = ? AND " 
+			+ REQUESTING_MEMBER_COL + " = ? GROUP BY " + PROVIDING_MEMBER_COL;
+	
+	public List<AccountingInfo> getUserConsumptionPerMemberByMemberId(String userId, 
+			String memberId) {
+		LOGGER.debug("Getting user " + userId 
+				+ " consumption per member where the requesting member is " + memberId);
+		PreparedStatement statement = null;
+		Connection conn = null;
+		try {
+			conn = getConnection();
+			LOGGER.debug(SELECT_USER_CONSUMPTION_PER_MEMBER);
+			statement = conn.prepareStatement(SELECT_USER_CONSUMPTION_PER_MEMBER);
+			statement.setString(1, userId);
+			statement.setString(2, memberId);
+			statement.execute();
+			return createAccounting(statement.getResultSet());
+		} catch (Exception e) {
+			LOGGER.debug("Could not get user consumption", e);
+			return null;
+		}
+	}
+	
 	private static final String SELECT_SPECIFIC_USAGE_SQL = "SELECT * FROM " + USAGE_TABLE_NAME
 			+ " WHERE " + USER_COL + " = ? AND requesting_member = ? AND providing_member = ?";
 	
@@ -340,7 +339,10 @@ public class AccountingDataStore {
 		return null;
 	}
 
-	/**
+	/**.when('/usage/user/:userId', {
+				templateUrl: 'templates/user.phtml',
+				controller: 'UsageByUserCtrl'
+			})
 	 * @return the connection
 	 * @throws SQLException
 	 */

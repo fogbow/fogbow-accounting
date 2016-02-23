@@ -3,7 +3,7 @@
 		<!-- Nav tabs -->
 		<ul class="mytabs nav nav-tabs" role="tablist">
 			<li role="presentation" class="active"><a href="#localuserstab" aria-controls="localuserstab" role="tab" data-toggle="tab">Local Users</a></li>
-		    <li role="presentation"><a href="#memberstab" aria-controls="memberstab" role="tab" data-toggle="tab">Members</a></li>
+		    <li role="presentation"><a href="#memberstab" aria-controls="memberstab" role="tab" data-toggle="tab">Federation</a></li>
 		</ul>
 
 		<!-- Tab panes -->
@@ -19,14 +19,14 @@
 		    		</thead>
 		    		<tbody>
 		    			<tr ng-repeat="use in usage">
-		    				<td><a href="#/usage/user/{{use.federation_user}}">{{use.user}}</a></td>
+		    				<td><a href="#/usage/member/{{_localMember}}/user/{{use.user}}">{{use.user}}</a></td>
 		    				<td>{{use.usage}}</td>
 		    			</tr>
 		    		</tbody>
 		    	</table>
 			</div>
 		    <div role="tabpanel" class="tab-pane" id="memberstab">
-		    	<h3>Members</h3>
+		    	<h3>Federation</h3>
 		    	<table class="table table-condensed table-striped">
 		    		<thead>
 		    			<tr>
