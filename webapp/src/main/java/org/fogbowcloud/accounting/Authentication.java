@@ -24,11 +24,11 @@ public class Authentication {
     	}
     	
 		String managerUrl = prop.getProperty(FogbowConstants.FOGBOW_MANAGER_URL_PROP);
-    	WebTarget target = client.target(managerUrl + FogbowConstants.REQUEST_TERM);
+    	WebTarget target = client.target(managerUrl + FogbowConstants.ACCOUNTING_TERM);
     	Invocation get = target.request()
     			.header(FogbowConstants.CONTENT_TYPE_HEADER_ATTR, FogbowConstants.CONTENT_TYPE_TEXT_OCCI)
     			.header(FogbowConstants.AUTH_TOKEN_HEADER_ATTR, sessionAuthToken.toString())
-    			.accept(MediaType.TEXT_PLAIN)
+    			.accept(MediaType.APPLICATION_JSON)
     			.buildGet();
     	Response response = get.invoke();
     	

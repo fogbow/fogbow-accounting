@@ -20,6 +20,7 @@ public class Main {
         HttpServer server = new ServerWrapper().create(
         		basePort == null ? DEFAULT_PORT : Integer.valueOf(basePort), AccountingApplication.class);
         server.start();
+		AccountingDataStoreUpdater dataStoreUpdater = new AccountingDataStoreUpdater(props);
         return server; 
 	}
 

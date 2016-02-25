@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -89,34 +90,50 @@ public class UsageResource {
 		if (!Authentication.checkAuthToken(request, properties)) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
+		String localMemberId = properties.getProperty(FogbowConstants.FOGBOW_MANAGER_ID_PROP);
 		JSONArray membersUsage = new JSONArray();
 		
-		List<AccountingInfo> consumption = dataStore.getConsumptionPerMember();
-		List<AccountingInfo> provision = dataStore.getProvisionPerMember();
+		List<AccountingInfo> consumption = dataStore.getLocalMemberConsumptionFromMembers(localMemberId);
+		List<AccountingInfo> provision = dataStore.getLocalMemberProvisionToMembers(localMemberId);
 		
 		Map<String, JSONObject> usageMap = new HashMap<String, JSONObject>();
 		//setting consumption
 		for (AccountingInfo accountingInfo : consumption) {
 			JSONObject memberUsage = new JSONObject();
-			memberUsage.put("memberId", accountingInfo.getRequestingMember());
+			String memberId = accountingInfo.getProvidingMember();
+			memberUsage.put("memberId", memberId);
 			memberUsage.put("consumed", accountingInfo.getUsage());
-			usageMap.put(accountingInfo.getRequestingMember(), memberUsage);
+			memberUsage.put("donated", 0);
+			usageMap.put(memberId, memberUsage);
 		}
 		
-		//setting donation and debit
+		//setting donation and debt
 		for (AccountingInfo accountingInfo : provision) {
-			String memberId = accountingInfo.getProvidingMember();
+			String memberId = accountingInfo.getRequestingMember();
 			JSONObject memberUsage = usageMap.get(memberId);
-			
+			if (membersUsage == null) {
+				memberUsage = new JSONObject();
+				memberUsage.put("memberId", memberId);
+				memberUsage.put("consumed", 0);
+			}
+			memberUsage.put("donated", accountingInfo.getUsage());
+			usageMap.put(memberId, memberUsage);
+		}
+		
+		for (Entry<String, JSONObject> entry : usageMap.entrySet()) {
+			JSONObject memberUsage = entry.getValue();
 			DecimalFormat df = new DecimalFormat("#.##");
-			double balance = 0, consumed = 0, donated = 0;
-			donated = accountingInfo.getUsage();
-			consumed = memberUsage.getDouble("consumed");
-			balance = Math.max(0, (consumed - donated) + Math.sqrt(donated));
+			double nofBalance = 0, 
+				consumed = memberUsage.getDouble("consumed"), 
+				donated = memberUsage.getDouble("donated"), 
+				balance = 0;
+			balance = consumed - donated;
+			nofBalance = Math.max(0, (consumed - donated) + Math.sqrt(donated));
 			
 			memberUsage.put("donated", df.format(donated));
 			memberUsage.put("consumed", df.format(consumed));
-			memberUsage.put("debit", df.format(balance));
+			memberUsage.put("balance", df.format(balance));
+			memberUsage.put("nofBalance", df.format(nofBalance));
 			membersUsage.put(memberUsage);
 		}
 		

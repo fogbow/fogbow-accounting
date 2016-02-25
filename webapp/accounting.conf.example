@@ -1,4 +1,10 @@
 base.port=8080
 fogbow.manager.url=http://150.165.15.81:8182
 fogbow.manager.id=servers.lsd.ufcg.edu.br
+
 accounting.datastore.url=jdbc:sqlite:fogbowAccountingDB.sqlite
+accounting.datastore.update.interval=5
+
+fogbow.voms.proxy.filepath=/tmp/x509up_u1350
+fogbow.voms.server=eubrazilcc
+fogbow.voms.certificate.password=password

@@ -240,18 +240,22 @@ public class AccountingDataStore {
 	}
 	
 	private static final String SELECT_NOF_CONSUMED_OVERVIEW = "SELECT " + USER_COL + ", " + REQUESTING_MEMBER_COL + ", " 
-			+ PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME + " GROUP BY " + REQUESTING_MEMBER_COL;
-	private static final String SELECT_NOF_PROVISION_OVERVIEW = "SELECT " + USER_COL + ", " + REQUESTING_MEMBER_COL + ", " 
-			+ PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME + " GROUP BY " + PROVIDING_MEMBER_COL;
+			+ PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME 
+			+ " WHERE " + REQUESTING_MEMBER_COL + " = ? GROUP BY " + PROVIDING_MEMBER_COL;
 	
-	public List<AccountingInfo> getConsumptionPerMember() {
-		LOGGER.debug("Getting NOF consumption info");
-		Statement statement = null;
+	private static final String SELECT_NOF_PROVISION_OVERVIEW = "SELECT " + USER_COL + ", " + REQUESTING_MEMBER_COL + ", " 
+			+ PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME 
+			+ " WHERE " + PROVIDING_MEMBER_COL + " = ? GROUP BY " + REQUESTING_MEMBER_COL;
+	
+	public List<AccountingInfo> getLocalMemberConsumptionFromMembers(String localMemberId) {
+		LOGGER.debug("Getting NOF consumption of " + localMemberId);
+		PreparedStatement statement = null;
 		Connection conn = null;
 		try {
 			conn = getConnection();
-			statement = conn.createStatement();
-			statement.execute(SELECT_NOF_CONSUMED_OVERVIEW);
+			statement = conn.prepareStatement(SELECT_NOF_CONSUMED_OVERVIEW);
+			statement.setString(1, localMemberId);
+			statement.execute();
 			return createAccounting(statement.getResultSet());
 		} catch (SQLException e) {
 			LOGGER.error("Couldn't get accounting info for NOF summary", e);
@@ -259,14 +263,15 @@ public class AccountingDataStore {
 		}
 	}
 	
-	public List<AccountingInfo> getProvisionPerMember() {
+	public List<AccountingInfo> getLocalMemberProvisionToMembers(String localMemberId) {
 		LOGGER.debug("Getting NOF provision info");
-		Statement statement = null;
+		PreparedStatement statement = null;
 		Connection conn = null;
 		try {
 			conn = getConnection();
-			statement = conn.createStatement();
-			statement.execute(SELECT_NOF_PROVISION_OVERVIEW);
+			statement = conn.prepareStatement(SELECT_NOF_PROVISION_OVERVIEW);
+			statement.setString(1, localMemberId);
+			statement.execute();
 			return createAccounting(statement.getResultSet());
 		} catch (SQLException e) {
 			LOGGER.error("Couldn't get accounting info for NOF summary", e);

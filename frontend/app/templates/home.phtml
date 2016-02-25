@@ -31,9 +31,10 @@
 		    		<thead>
 		    			<tr>
 		    				<th>Member ID</th>
-		    				<th>Donated</th>
-		    				<th>Consumed</th>
-		    				<th>Debit</th>
+		    				<th>Donated to (FCU*min)</th>
+		    				<th>Consumed from (FCU*min)</th>
+		    				<th>Balance</th>
+		    				<th>NOF Balance</th>
 		    			</tr>
 		    		</thead>
 		    		<tbody>
@@ -41,7 +42,8 @@
 		    				<td><a href="#/usage/member/{{member.memberId}}">{{member.memberId}}</a></td>
 		    				<td>{{member.donated}}</td>
 		    				<td>{{member.consumed}}</td>
-		    				<td>{{member.debit}}</td>
+		    				<td>{{member.balance}}</td>
+		    				<td>{{member.nofBalance}}</td>
 		    			</tr>
 		    		</tbody>
 		    	</table>

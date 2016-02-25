@@ -163,6 +163,11 @@
 	      <artifactId>mockito-all</artifactId>
 	      <version>1.8.4</version>
 	    </dependency>
+	    <dependency>
+		  <groupId>org.italiangrid</groupId>
+		  <artifactId>voms-api-java</artifactId>
+		  <version>3.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>

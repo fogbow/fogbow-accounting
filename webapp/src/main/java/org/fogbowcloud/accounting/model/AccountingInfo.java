@@ -2,6 +2,7 @@ package org.fogbowcloud.accounting.model;
 
 import java.text.DecimalFormat;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -47,6 +48,14 @@ public class AccountingInfo {
 		DecimalFormat df = new DecimalFormat("#.##");
 		infoJSON.put("usage", df.format(this.usage));
 		return infoJSON;
+	}
+	
+	public static AccountingInfo fromJSON(String accountingEntryJSON) throws JSONException {
+		JSONObject jsonObject = new JSONObject(accountingEntryJSON);
+		AccountingInfo accountingEntry = new AccountingInfo(jsonObject.optString("user"),
+				jsonObject.optString("requestingMember"), jsonObject.optString("providingMember"));
+		accountingEntry.addConsuption(Double.parseDouble(jsonObject.optString("usage")));
+		return accountingEntry;
 	}
 	
 	@Override
