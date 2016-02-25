@@ -51,7 +51,7 @@ public class UsageResource {
 		if (memberId == null) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
-		List<AccountingInfo> accountingInfo = dataStore.getMemberConsumptionInfoPerUser(memberId);
+		List<AccountingInfo> accountingInfo = dataStore.getLocalMemberUsersConsumption(memberId);
 		for (AccountingInfo info : accountingInfo) {
 			usage.put(info.toJSON());
 		}

@@ -220,7 +220,7 @@ public class AccountingDataStore {
 	
 	private static final String SELECT_ALL_USAGE_BY_MEMBER = "SELECT " + USER_COL + ", " + REQUESTING_MEMBER_COL 
 			+ ", " + PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME 
-			+ " WHERE " + REQUESTING_MEMBER_COL + " = ? GROUP BY " + USER_COL;
+			+ " WHERE " + PROVIDING_MEMBER_COL + " = ? GROUP BY " + USER_COL;
 	
 	public List<AccountingInfo> getMemberConsumptionInfoPerUser(String memberId) {
 		LOGGER.debug("Getting AccounintgInfo by member: " + memberId + ", grouped by user");
@@ -230,6 +230,27 @@ public class AccountingDataStore {
 			conn = getConnection();
 			statement = conn.prepareStatement(SELECT_ALL_USAGE_BY_MEMBER);
 			statement.setString(1, memberId);
+
+			statement.execute();
+			return createAccounting(statement.getResultSet());
+		} catch (SQLException e) {
+			LOGGER.error("Couldn't get keys from DB.", e);
+			return null;
+		}	
+	}
+	
+	private static final String SELECT_LOCAL_MEMBER_USERS_CONSUMPTION = "SELECT " + USER_COL + ", " + REQUESTING_MEMBER_COL 
+			+ ", " + PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME 
+			+ " WHERE " + REQUESTING_MEMBER_COL + " = ? GROUP BY " + USER_COL;
+	
+	public List<AccountingInfo> getLocalMemberUsersConsumption(String localMemberId) {
+		LOGGER.debug("Getting AccounintgInfo by member: " + localMemberId + ", grouped by user");
+		PreparedStatement statement = null;
+		Connection conn = null;
+		try {
+			conn = getConnection();
+			statement = conn.prepareStatement(SELECT_LOCAL_MEMBER_USERS_CONSUMPTION);
+			statement.setString(1, localMemberId);
 
 			statement.execute();
 			return createAccounting(statement.getResultSet());
