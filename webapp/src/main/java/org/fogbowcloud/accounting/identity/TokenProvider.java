@@ -22,9 +22,10 @@ public class TokenProvider {
 	private Properties properties;
 	private Token token;
 	
-	public TokenProvider(Properties properties, ScheduledExecutorService handleTokeUpdateExecutor) throws FileNotFoundException, IOException{
+	public TokenProvider(Properties properties, ScheduledExecutorService handleTokeUpdateExecutor) throws FileNotFoundException, IOException {
 		this.properties = properties;
-		this.token = createNewTokenFromFile(properties.getProperty(FogbowConstants.FOGBOW_VOMS_PROXY_FILEPATH));
+		this.token = createToken(properties.getProperty(FogbowConstants.FOGBOW_VOMS_SERVER), 
+				properties.getProperty(FogbowConstants.FOGBOW_VOMS_CERTIFICATE_PASSWORD));
 		
 		ScheduledExecutorService handleTokenUpdateExecutor = handleTokeUpdateExecutor;
 		handleTokenUpdate(handleTokenUpdateExecutor, properties.getProperty(FogbowConstants.FOGBOW_VOMS_SERVER),  

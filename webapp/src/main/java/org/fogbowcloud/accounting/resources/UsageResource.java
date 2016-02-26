@@ -148,7 +148,8 @@ public class UsageResource {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		JSONArray usage = new JSONArray();
-		List<AccountingInfo> accountingInfo = dataStore.getMemberConsumptionInfoPerUser(memberId);
+		String localMemberId = properties.getProperty(FogbowConstants.FOGBOW_MANAGER_ID_PROP);
+		List<AccountingInfo> accountingInfo = dataStore.getMemberConsumptionFromLocalMemberPerUser(localMemberId, memberId);
 		LOGGER.debug("Accounting info for member " + memberId + ", resulted in list of " + accountingInfo.size());
 		for (AccountingInfo info : accountingInfo) {
 			usage.put(info.toJSON());

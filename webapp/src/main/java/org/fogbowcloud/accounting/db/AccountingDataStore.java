@@ -92,6 +92,8 @@ public class AccountingDataStore {
 		}
 	}
 	
+	private static final String DELETE_ALL_FROM_USAGE = "DELETE FROM " + USAGE_TABLE_NAME;
+	
 	public boolean update(List<AccountingInfo> usage) {
 		LOGGER.debug("Updating usage into database.");
 		LOGGER.debug("Usage=" + usage);
@@ -103,6 +105,7 @@ public class AccountingDataStore {
 		
 		PreparedStatement updateMemberStatement = null;
 		PreparedStatement insertMemberStatement = null;
+		Statement deleteAllStatement = null;
 		
 		Connection connection = null;
 
@@ -110,6 +113,9 @@ public class AccountingDataStore {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 
+			deleteAllStatement = connection.createStatement();
+			deleteAllStatement.execute(DELETE_ALL_FROM_USAGE);
+			
 			insertMemberStatement = connection.prepareStatement(INSERT_MEMBER_USAGE_SQL);
 			updateMemberStatement = connection.prepareStatement(UPDATE_MEMBER_USAGE_SQL);
 		
@@ -134,7 +140,8 @@ public class AccountingDataStore {
 			}
 			return false;
 		} finally {
-			close(updateMemberStatement, connection);
+			close(deleteAllStatement, null);
+			close(updateMemberStatement, null);
 			close(insertMemberStatement, connection);
 		}
 	}
@@ -220,16 +227,17 @@ public class AccountingDataStore {
 	
 	private static final String SELECT_ALL_USAGE_BY_MEMBER = "SELECT " + USER_COL + ", " + REQUESTING_MEMBER_COL 
 			+ ", " + PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME 
-			+ " WHERE " + PROVIDING_MEMBER_COL + " = ? GROUP BY " + USER_COL;
+			+ " WHERE " + REQUESTING_MEMBER_COL + "  = ? AND " + PROVIDING_MEMBER_COL + " = ? GROUP BY " + USER_COL;
 	
-	public List<AccountingInfo> getMemberConsumptionInfoPerUser(String memberId) {
+	public List<AccountingInfo> getMemberConsumptionFromLocalMemberPerUser(String localMemberId, String memberId) {
 		LOGGER.debug("Getting AccounintgInfo by member: " + memberId + ", grouped by user");
 		PreparedStatement statement = null;
 		Connection conn = null;
 		try {
 			conn = getConnection();
 			statement = conn.prepareStatement(SELECT_ALL_USAGE_BY_MEMBER);
-			statement.setString(1, memberId);
+			statement.setString(1, localMemberId);
+			statement.setString(2, memberId);
 
 			statement.execute();
 			return createAccounting(statement.getResultSet());
@@ -388,7 +396,7 @@ public class AccountingDataStore {
 					statement.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error("Couldn't close statement");
+				LOGGER.error("Couldn't close statement", e);
 			}
 		}
 
@@ -398,7 +406,7 @@ public class AccountingDataStore {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error("Couldn't close connection");
+				LOGGER.error("Couldn't close connection", e);
 			}
 		}
 	}
@@ -455,6 +463,11 @@ class AccountingEntryKey {
 					&& getRequestingMember().equals(other.getRequestingMember());
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
 	}
 	
 	@Override
