@@ -187,12 +187,7 @@ public class AccountingDataStore {
 		try {
 			Connection connection = getConnection();
 			deleteStatement = connection.createStatement();
-			boolean deleted = deleteStatement.execute(DELETE_ALL_FROM_USAGE);
-			if (deleted) {
-				LOGGER.debug("Usage data deleted");
-			} else {
-				LOGGER.debug("Error while deleting usage data");
-			}
+			deleteStatement.execute(DELETE_ALL_FROM_USAGE);
 		} catch (SQLException e) {
 			LOGGER.debug("Could not delete usage data", e);
 		}
