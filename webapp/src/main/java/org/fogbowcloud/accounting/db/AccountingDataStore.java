@@ -92,8 +92,6 @@ public class AccountingDataStore {
 		}
 	}
 	
-	private static final String DELETE_ALL_FROM_USAGE = "DELETE FROM " + USAGE_TABLE_NAME;
-	
 	public boolean update(List<AccountingInfo> usage) {
 		LOGGER.debug("Updating usage into database.");
 		LOGGER.debug("Usage=" + usage);
@@ -103,9 +101,10 @@ public class AccountingDataStore {
 			return false;
 		}
 		
+		clearUsage();
+		
 		PreparedStatement updateMemberStatement = null;
 		PreparedStatement insertMemberStatement = null;
-		Statement deleteAllStatement = null;
 		
 		Connection connection = null;
 
@@ -113,9 +112,6 @@ public class AccountingDataStore {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 
-			deleteAllStatement = connection.createStatement();
-			deleteAllStatement.execute(DELETE_ALL_FROM_USAGE);
-			
 			insertMemberStatement = connection.prepareStatement(INSERT_MEMBER_USAGE_SQL);
 			updateMemberStatement = connection.prepareStatement(UPDATE_MEMBER_USAGE_SQL);
 		
@@ -140,7 +136,6 @@ public class AccountingDataStore {
 			}
 			return false;
 		} finally {
-			close(deleteAllStatement, null);
 			close(updateMemberStatement, null);
 			close(insertMemberStatement, connection);
 		}
@@ -161,7 +156,7 @@ public class AccountingDataStore {
 		
 		List<AccountingEntryKey> entryKeys = getEntryKeys();
 
-		LOGGER.debug("Databa entry keys=" + entryKeys);
+		LOGGER.debug("Database entry keys=" + entryKeys);
 		for (AccountingInfo accountingInfo : usage) {
 			// inserting new usage entry
 			if (!entryKeys.contains(new AccountingEntryKey(accountingInfo.getUser(), accountingInfo
@@ -180,6 +175,26 @@ public class AccountingDataStore {
 				updateMemberStatement.setString(4, accountingInfo.getProvidingMember());
 				updateMemberStatement.addBatch();
 			}
+		}
+	}
+	
+	private static final String DELETE_ALL_FROM_USAGE = "DELETE FROM " + USAGE_TABLE_NAME;
+	
+	private void clearUsage() {
+		LOGGER.debug("Deleting usage entries");
+		Statement deleteStatement = null;
+		
+		try {
+			Connection connection = getConnection();
+			deleteStatement = connection.createStatement();
+			boolean deleted = deleteStatement.execute(DELETE_ALL_FROM_USAGE);
+			if (deleted) {
+				LOGGER.debug("Usage data deleted");
+			} else {
+				LOGGER.debug("Error while deleting usage data");
+			}
+		} catch (SQLException e) {
+			LOGGER.debug("Could not delete usage data", e);
 		}
 	}
 
