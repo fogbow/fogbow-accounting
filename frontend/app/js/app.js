@@ -16,12 +16,18 @@ fogbowAccountingApp.config(['$routeProvider',
 			when('/home', {
 				templateUrl: 'templates/home.phtml',
 				controller: 'HomeCtrl'
+			}).when('/home/federation', {
+				templateUrl: 'templates/home.phtml',
+				controller: 'HomeCtrl'
 			}).when('/login', {
 				templateUrl: 'templates/login.phtml',
 				controller: 'LoginCtrl'
-			}).when('/usage/member/:memberId', {
+			}).when('/usage/consumedfrom/:memberId', {
 				templateUrl: 'templates/consumptionperuser.phtml',
-				controller: 'MemberUsagePerUserCtrl'
+				controller: 'ConsumedFromMemberPerUserCtrl'
+			}).when('/usage/donatedto/:memberId', {
+				templateUrl: 'templates/donationperuser.phtml',
+				controller: 'DonatedToMemberPerUserCtrl'
 			}).when('/usage/member/:memberId/user/:userId', {
 				templateUrl: 'templates/user.phtml',
 				controller: 'UsageByUserCtrl'

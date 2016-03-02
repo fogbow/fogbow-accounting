@@ -128,7 +128,7 @@ public class UsageResource {
 				donated = memberUsage.getDouble("donated"), 
 				balance = 0;
 			balance = consumed - donated;
-			nofBalance = Math.max(0, (consumed - donated) + Math.sqrt(donated));
+			nofBalance = Math.max(0, (consumed - donated));
 			
 			memberUsage.put("donated", df.format(donated));
 			memberUsage.put("consumed", df.format(consumed));
@@ -141,16 +141,33 @@ public class UsageResource {
 	}
 	
 	@GET
-	@Path("/members/{memberId}")
+	@Path("/consumedfrom/{memberId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getMemberConsumptionPerUser(@PathParam("memberId") String memberId) {
+	public Response getLocalMemberConsumptionPerUser(@PathParam("memberId") String memberId) {
 		if (!Authentication.checkAuthToken(request, properties)) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		JSONArray usage = new JSONArray();
 		String localMemberId = properties.getProperty(FogbowConstants.FOGBOW_MANAGER_ID_PROP);
-		List<AccountingInfo> accountingInfo = dataStore.getMemberConsumptionFromLocalMemberPerUser(localMemberId, memberId);
-		LOGGER.debug("Accounting info for member " + memberId + ", resulted in list of " + accountingInfo.size());
+		List<AccountingInfo> accountingInfo = dataStore.getMemberConsumptionPerUser(localMemberId, memberId);
+		LOGGER.debug("Local member consumption on " + memberId + " per user: " + accountingInfo.toString());
+		for (AccountingInfo info : accountingInfo) {
+			usage.put(info.toJSON());
+		}
+		return Response.status(Status.OK).entity(usage).build();
+	}
+	
+	@GET
+	@Path("/donatedto/{memberId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getLocalMemberDonationPerUser(@PathParam("memberId") String requestingMember) {
+		if (!Authentication.checkAuthToken(request, properties)) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		JSONArray usage = new JSONArray();
+		String localMemberId = properties.getProperty(FogbowConstants.FOGBOW_MANAGER_ID_PROP);
+		List<AccountingInfo> accountingInfo = dataStore.getMemberConsumptionPerUser(requestingMember, localMemberId);
+		LOGGER.debug("Local member donation to " + requestingMember + " per user: " + accountingInfo.toString());
 		for (AccountingInfo info : accountingInfo) {
 			usage.put(info.toJSON());
 		}

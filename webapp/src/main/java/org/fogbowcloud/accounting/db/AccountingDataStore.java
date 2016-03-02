@@ -239,15 +239,15 @@ public class AccountingDataStore {
 			+ ", " + PROVIDING_MEMBER_COL + ", SUM(" + USAGE_COL + ") as usage FROM " + USAGE_TABLE_NAME 
 			+ " WHERE " + REQUESTING_MEMBER_COL + "  = ? AND " + PROVIDING_MEMBER_COL + " = ? GROUP BY " + USER_COL;
 	
-	public List<AccountingInfo> getMemberConsumptionFromLocalMemberPerUser(String localMemberId, String memberId) {
-		LOGGER.debug("Getting AccounintgInfo by member: " + memberId + ", grouped by user");
+	public List<AccountingInfo> getMemberConsumptionPerUser(String requestingMember, String providingMember) {
+		LOGGER.debug("Getting AccounintgInfo by member: " + providingMember + ", grouped by user");
 		PreparedStatement statement = null;
 		Connection conn = null;
 		try {
 			conn = getConnection();
 			statement = conn.prepareStatement(SELECT_ALL_USAGE_BY_MEMBER);
-			statement.setString(1, localMemberId);
-			statement.setString(2, memberId);
+			statement.setString(1, requestingMember);
+			statement.setString(2, providingMember);
 
 			statement.execute();
 			return createAccounting(statement.getResultSet());

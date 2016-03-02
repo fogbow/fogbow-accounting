@@ -2,19 +2,21 @@
 	<div class="col-md-12">
 		<!-- Nav tabs -->
 		<ul class="mytabs nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#localuserstab" aria-controls="localuserstab" role="tab" data-toggle="tab">Local Users</a></li>
-		    <li role="presentation"><a href="#memberstab" aria-controls="memberstab" role="tab" data-toggle="tab">Federation</a></li>
+			<li role="presentation" ng-class="locationPath == '/home/federation' ? '' : 'active'">
+				<a href="#localuserstab" aria-controls="localuserstab" role="tab" data-toggle="tab">Local users</a></li>
+		    <li role="presentation" ng-class="locationPath == '/home/federation' ? 'active' : ''">
+		    	<a href="#memberstab" aria-controls="memberstab" role="tab" data-toggle="tab">Federation</a></li>
 		</ul>
 
 		<!-- Tab panes -->
 		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane active" id="localuserstab">
-				<h2>Local Users</h2>
+			<div role="tabpanel" ng-class="locationPath == '/home/federation' ? 'tab-pane' : 'tab-pane active'" id="localuserstab">
+				<h2>Local users</h2>
 				<table class="table table-condensed table-striped">
 		    		<thead>
 		    			<tr>
-		    				<th>Federation user</th>
-		    				<th>Consumed</th>
+		    				<th>Federation identity</th>
+		    				<th>Consumed (FCU*min)</th>
 		    			</tr>
 		    		</thead>
 		    		<tbody>
@@ -25,25 +27,38 @@
 		    		</tbody>
 		    	</table>
 			</div>
-		    <div role="tabpanel" class="tab-pane" id="memberstab">
+		    <div role="tabpanel" ng-class="locationPath == '/home/federation' ? 'tab-pane active' : 'tab-pane'" id="memberstab">
 		    	<h3>Federation</h3>
 		    	<table class="table table-condensed table-striped">
 		    		<thead>
 		    			<tr>
-		    				<th>Member ID</th>
-		    				<th>Donated to (FCU*min)</th>
-		    				<th>Consumed from (FCU*min)</th>
-		    				<th>Balance</th>
-		    				<th>NOF Balance</th>
+		    				<th>&nbsp;</th>
+		    				<th colspan="2"><p style="text-align: center;">
+		    					<i class="glyphicon glyphicon-user" style="color: green;" title="Local member ID"></i> Local member: {{_localMember}}</p></th>
+		    				<th>&nbsp;</th>
+		    				<th>&nbsp;</th>
+		    			</tr>
+		    			<tr>
+		    				<th><i class="glyphicon glyphicon-user" style="color: red;" title="Remote member ID"></i>&nbsp;Member ID</th>
+		    				<th><i class="glyphicon glyphicon-user" style="color: green;" 
+		    					title="Local member ID"></i> Donated to (FCU*min) <i class="glyphicon glyphicon-user" style="color: red;" title="Remote member ID"></i></th>
+		    				<th><i class="glyphicon glyphicon-user" style="color: green;" 
+		    					title="Local member ID"></i> Consumed from (FCU*min) <i class="glyphicon glyphicon-user" style="color: red;" title="Remote member ID"></i></th>
+		    				<th>Balance (FCU*min)</th>
+		    				<th>NOF Balance (FCU*min)</th>
 		    			</tr>
 		    		</thead>
 		    		<tbody>
 		    			<tr ng-repeat="member in members">
-		    				<td><a href="#/usage/member/{{member.memberId}}">{{member.memberId}}</a></td>
-		    				<td>{{member.donated}}</td>
-		    				<td>{{member.consumed}}</td>
+		    				<td>{{member.memberId}}</td>
+		    				<td><a href="#/usage/donatedto/{{member.memberId}}">{{member.donated}}</a></td>
+		    				<td><a href="#/usage/consumedfrom/{{member.memberId}}">{{member.consumed}}</a></td>
 		    				<td>{{member.balance}}</td>
 		    				<td>{{member.nofBalance}}</td>
+		    			</tr>
+		    			<tr>
+		    				<td colspan="5" align="right"><small><i style="color: green;" class="glyphicon glyphicon-user"></i> local member | 
+		    					<i style="color: red;" class="glyphicon glyphicon-user"></i> remote member</small></td>
 		    			</tr>
 		    		</tbody>
 		    	</table>

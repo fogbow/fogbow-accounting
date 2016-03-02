@@ -20,3 +20,13 @@ fogbowAccountingServices.factory('Nof', ['$resource',
 	function($resource) {
 		return $resource('/api/usage/members/:memberId', {'memberId': ''});
 	}]);
+
+fogbowAccountingServices.factory('LocalMemberConsumption', ['$resource', 
+	function($resource) {
+		return $resource('/api/usage/consumedfrom/:memberId');
+	}]);
+
+fogbowAccountingServices.factory('LocalMemberDonation', ['$resource', 
+	function($resource) {
+		return $resource('/api/usage/donatedto/:memberId');
+	}]);

@@ -2,8 +2,8 @@
 
 var fogbowAccountingControllers = angular.module('fogbowAccountingControllers', []);
 
-fogbowAccountingControllers.controller('HomeCtrl', ['$scope', 'Usage', 'Nof', 
-	function($scope, Usage, Nof) {
+fogbowAccountingControllers.controller('HomeCtrl', ['$scope', '$location', 'Usage', 'Nof', 
+	function($scope, $location, Usage, Nof) {
 		$scope.initTabs = function() {
 			$(".mytabs a").click(function(e){
 				e.preventDefault();
@@ -13,6 +13,7 @@ fogbowAccountingControllers.controller('HomeCtrl', ['$scope', 'Usage', 'Nof',
 		$scope.initTabs();
 		$scope.usage = Usage.query();
 		$scope.members = Nof.query();
+		$scope.locationPath = $location.path();
 	}]);
 
 fogbowAccountingControllers.controller('LoginCtrl', ['$scope', '$location', '$http', 'toastr',
@@ -42,8 +43,14 @@ fogbowAccountingControllers.controller('UsageByUserCtrl', ['$scope', '$routePara
 		$scope.usage = UsageByUser.query({userId: $routeParams.userId, memberId: $routeParams.memberId});
 	}]);
 
-fogbowAccountingControllers.controller('MemberUsagePerUserCtrl', ['$scope', '$routeParams', 'Nof', 
-	function($scope, $routeParams, Nof) {
+fogbowAccountingControllers.controller('ConsumedFromMemberPerUserCtrl', ['$scope', '$routeParams', 'LocalMemberConsumption', 
+	function($scope, $routeParams, LocalMemberConsumption) {
 		$scope.memberId = $routeParams.memberId;
-		$scope.memberUsers = Nof.query({'memberId': $routeParams.memberId});
+		$scope.memberUsers = LocalMemberConsumption.query({'memberId': $routeParams.memberId});
+	}]);
+
+fogbowAccountingControllers.controller('DonatedToMemberPerUserCtrl', ['$scope', '$routeParams', 'LocalMemberDonation', 
+	function($scope, $routeParams, LocalMemberDonation) {
+		$scope.memberId = $routeParams.memberId;
+		$scope.memberUsers = LocalMemberDonation.query({'memberId': $routeParams.memberId});
 	}]);
