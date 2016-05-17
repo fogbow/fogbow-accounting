@@ -62,7 +62,7 @@ public class AccountingDataStoreUpdater {
 	private void fetchAccountingFromManager() {
 		LOGGER.debug("Fetching accounting data");
 		try {
-			String response = target.path(FogbowConstants.ACCOUNTING_TERM).request()
+			String response = target.path(FogbowConstants.COMPUTE_ACCOUNTING_TERM).request()
 					.header(FogbowConstants.CONTENT_TYPE_HEADER_ATTR, FogbowConstants.CONTENT_TYPE_TEXT_OCCI)
 					.header(FogbowConstants.AUTH_TOKEN_HEADER_ATTR, this.tokenProvider.getToken().getAccessId().replaceAll("\n", ""))
 					.accept(MediaType.APPLICATION_JSON).get(String.class);

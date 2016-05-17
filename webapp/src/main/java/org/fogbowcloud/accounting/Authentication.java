@@ -24,7 +24,7 @@ public class Authentication {
     	}
     	
 		String managerUrl = prop.getProperty(FogbowConstants.FOGBOW_MANAGER_URL_PROP);
-    	WebTarget target = client.target(managerUrl + FogbowConstants.ACCOUNTING_TERM);
+    	WebTarget target = client.target(managerUrl + FogbowConstants.COMPUTE_ACCOUNTING_TERM);
     	Invocation get = target.request()
     			.header(FogbowConstants.CONTENT_TYPE_HEADER_ATTR, FogbowConstants.CONTENT_TYPE_TEXT_OCCI)
     			.header(FogbowConstants.AUTH_TOKEN_HEADER_ATTR, sessionAuthToken.toString())
