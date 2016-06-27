@@ -111,7 +111,7 @@ public class UsageResource {
 		for (AccountingInfo accountingInfo : provision) {
 			String memberId = accountingInfo.getRequestingMember();
 			JSONObject memberUsage = usageMap.get(memberId);
-			if (membersUsage == null) {
+			if (memberUsage == null) {
 				memberUsage = new JSONObject();
 				memberUsage.put("memberId", memberId);
 				memberUsage.put("consumed", 0);
