@@ -2,7 +2,7 @@ package org.fogbowcloud.accounting;
 
 public class FogbowConstants {
 	public static final String MEMBER_TERM = "/members";
-	public static final String REQUEST_TERM = "/fogbow_request";
+	public static final String ORDER_TERM = "/order";
 	public static final String COMPUTE_ACCOUNTING_TERM = "/member/accounting/compute";
 	
 	public static final String CONTENT_TYPE_HEADER_ATTR = "content-type";
